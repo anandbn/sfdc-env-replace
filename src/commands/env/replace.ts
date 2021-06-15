@@ -60,7 +60,7 @@ export default class Replace extends SfdxCommand {
       });
       this.ux.log(`${sourceFile}: Formatted to XML `);
       fs.writeFileSync(`${destFile}`, fileData, { encoding: 'utf8' });
-      this.ux.log(`${sourceFile}: Written file to ${destFile}`);
+      this.ux.log(`${sourceFile}: Written  file to ${destFile}`);
     }
 
     // Return an object to be displayed with --json
