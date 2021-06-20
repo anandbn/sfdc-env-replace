@@ -1,6 +1,0 @@
-[
-    {
-        "findText":"<botUser>virtual.assistant@salesforce.com.geico.dev</botUser>",
-        "replaceText":"<botUser>virtual.assistant@salesforce.com.geico.team</botUser>"
-    }
-]
