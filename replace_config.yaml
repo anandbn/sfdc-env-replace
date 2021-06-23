@@ -8,6 +8,55 @@ regex_lib:
     routing_type: '(.[^\n]+<routingType xsi:nil="true"\/>)'
     bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.geico\.dev(?:(?!<botUser>).)*?<\/botUser>)'
 rules:
+record_type_visibility:
+        regex_name: 'record-type-visibility'
+        files:
+            - force-app/main/default/profiles/Admin.profile-meta.xml
+        replace_values:
+            - Knowledge__kav.FAQ
+    invalid_user_permissions: 
+        extensions:
+            - profile
+            - permissionset
+        files:
+            - force-app/main/default/profiles/Admin.profile-meta.xml
+        regex_name: 'user-permission' # name must exist on the regex-lib section
+        replace_values:
+            - ArchiveArticles
+            - EditTranslation
+            - PublishArticles
+            - PublishTranslation
+            - SubmitForTranslation
+            - ViewArchivedArticles
+            - ViewDraftArticles
+            - ManageSandboxes
+    replace_skills: 
+        files:
+            - force-app/main/default/skills/NJ.skill-meta.xml
+        regex_name: 'skills' # name must exist on the regex-lib section
+        replace_values:
+            - ramintha@salesforce.com
+    replace_knowlwedge_permset: 
+        files:
+          - force-app/main/default/permissionsets/TCRM_Custom_Permissions.permissionset-meta.xml
+        regex_name: 'knowledge-perm-set' # name must exist on the regex-lib section
+        replace_values:
+            - Knowledge__kav
+    replace_analytics_settings: 
+        files:
+          - force-app/main/default/settings/Analytics.settings-meta.xml
+        regex_name: 'analytics-settings' # name must exist on the regex-lib section
+    replace-layout-folderid:
+        files:
+          - force-app/main/default/layouts/Macro-Macro Layout.layout-meta.xml
+        regex_name: 'layout-folderid' # name must exist on the regex-lib section
+        replace_values:
+            - FolderId
+    replace_routing_options:
+        files:
+          - force-app/main/default/liveChatButtons/Virtual_Assistant_Application.liveChatButton-meta.xml
+        regex_name: 'routing_type'
+        replace_with: '<routingType>Choice</routingType>'
     replace_chatbot_user:
         files:
           - force-app/main/default/bots/GEICO_Virtual_Assistant/GEICO_Virtual_Assistant.bot-meta.xml
