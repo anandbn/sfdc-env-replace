@@ -1,55 +1,13 @@
 regex_lib:
-    user-permission: '<userPermissions><enabled>true</enabled><name>__REPLACE_VALUE__</name></userPermissions>'
-    skills: '<assignments><users><user>__REPLACE_VALUE__</user></users></assignments>'
-    knowledge-perm-set: '<objectPermissions><allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit><allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>__REPLACE_VALUE__</object><viewAllRecords>true</viewAllRecords></objectPermissions>'
-    analytics-settings: '<canShareAppsWithCommunities>false</canShareAppsWithCommunities>'
-    layout-folderid: '<layoutItems><behavior>Edit</behavior><field>__REPLACE_VALUE__</field></layoutItems>'
-    routing_type: '<routingType xsi:nil="true"/>'
-    bot_user: '<botUser>virtual.assistant@salesforce.com.geico.dev</botUser>'
+    record-type-visibility: '(.[^\n]+<recordTypeVisibilities>(?:(?!<recordTypeVisibilities>).)*?<recordType>__REPLACE_VALUE__<\/recordType>(?:(?!<recordTypeVisibilities>).)*?<\/recordTypeVisibilities>)'
+    user-permission: '(.[^\n]+<userPermissions>(?:(?!<userPermissions>).)*?<name>__REPLACE_VALUE__<\/name>(?:(?!<userPermissions>).)*?<\/userPermissions>)'
+    skills: '(.[^\n]+<assignments>(?:(?!<assignments>).)*?<user>__REPLACE_VALUE__<\/user>(?:(?!<assignments>).)*?<\/assignments>)'    
+    knowledge-perm-set: '(.[^\n]+<objectPermissions>(?:(?!<objectPermissions>).)*?<object>__REPLACE_VALUE__<\/object>(?:(?!<objectPermissions>).)*?<\/objectPermissions>)'
+    analytics-settings: '(.[^\n]+<canShareAppsWithCommunities>(?:(?!<canShareAppsWithCommunities>).)*?(?:(?!<canShareAppsWithCommunities>).)*?<\/canShareAppsWithCommunities>)'
+    layout-folderid: '(.[^\n]+<layoutItems>(?:(?!<layoutItems>).)*?<field>FolderId<\/field>(?:(?!<layoutItems>).)*?<\/layoutItems>)'
+    routing_type: '(.[^\n]+<routingType xsi:nil="true"\/>)'
+    bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.geico\.dev(?:(?!<botUser>).)*?<\/botUser>)'
 rules:
-    invalid_user_permissions: 
-        extensions:
-            - profile
-            - permissionset
-        files:
-            - force-app/main/default/profiles/Admin.profile-meta.xml
-        regex_name: 'user-permission' # name must exist on the regex-lib section
-        replace_values:
-            - ArchiveArticles
-            - EditTranslation
-            - PublishArticles
-            - PublishTranslation
-            - SubmitForTranslation
-            - ViewArchivedArticles
-            - ViewDraftArticles
-            - ManageSandboxes
-    replace_skills: 
-        files:
-            - force-app/main/default/skills/NJ.skill-meta.xml
-        regex_name: 'skills' # name must exist on the regex-lib section
-        replace_values:
-            - ramintha@salesforce.com
-    replace_knowlwedge_permset: 
-        files:
-          - force-app/main/default/permissionsets/TCRM_Custom_Permissions.permissionset-meta.xml
-        regex_name: 'knowledge-perm-set' # name must exist on the regex-lib section
-        replace_values:
-            - Knowledge__kav
-    replace_analytics_settings: 
-        files:
-          - force-app/main/default/settings/Analytics.settings-meta.xml
-        regex_name: 'analytics-settings' # name must exist on the regex-lib section
-    replace-layout-folderid:
-        files:
-          - force-app/main/default/layouts/Macro-Macro Layout.layout-meta.xml
-        regex_name: 'layout-folderid' # name must exist on the regex-lib section
-        replace_values:
-            - FolderId
-    replace_routing_options:
-        files:
-          - force-app/main/default/liveChatButtons/Virtual_Assistant_Application.liveChatButton-meta.xml
-        regex_name: 'routing_type'
-        replace_with: '<routingType>Choice</routingType>'
     replace_chatbot_user:
         files:
           - force-app/main/default/bots/GEICO_Virtual_Assistant/GEICO_Virtual_Assistant.bot-meta.xml

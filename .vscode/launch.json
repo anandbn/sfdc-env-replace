@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
   {
+    "name": "Regex Test",
+    "program": "${workspaceFolder}/test_regex.js",
+    "request": "launch",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "pwa-node"
+  },
+  {
     "name": "YAML Parse",
     "program": "${workspaceFolder}/test_yaml_parse.js",
     "request": "launch",

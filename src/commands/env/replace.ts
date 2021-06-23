@@ -1,6 +1,6 @@
-import { string } from '@oclif/command/lib/flags';
+
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Messages, SfdxError } from '@salesforce/core';
+import { Messages} from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 const YAML = require('yaml')
 
@@ -12,7 +12,6 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('env-replace', 'replace');
 const fs = require('fs');
 const path = require('path');
-var formatXml = require('xml-formatter');
 export default class Replace extends SfdxCommand {
 
   public static description = messages.getMessage('commandDescription');
@@ -74,36 +73,49 @@ export default class Replace extends SfdxCommand {
 
     for (let sourceFile of replaceConfig.files) {
       let sourceFileAbsPath: string = `${this.flags.basedir}${path.sep}${sourceFile}`;
-      let destFile: string = `${sourceFileAbsPath}${this.flags.testmode ? '.new' : ''}`;
+      if(this.flags.testmode){
+        //backup the file if the backup file doesn't exist.
+        let backupFile: string = `${sourceFileAbsPath}${this.flags.testmode ? '.bkup' : ''}`;
+        if(!fs.existsSync(backupFile)){
+          fs.copyFileSync(sourceFileAbsPath,backupFile);
+          this.ux.log(`Rule[${ruleName}] - Created backup file at ${backupFile}`);
+        }
+      }
+
       let fileData: string = fs.readFileSync(sourceFileAbsPath, { encoding: 'utf8', flag: 'r' });
-      fileData = fileData.replace(/(\n(\s+)<)/gm, "<");
-      fileData = fileData.replace(/(\n<)/gm, "<");
       this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Unformatted XML at ${sourceFileAbsPath}`);
       if (replaceConfig.replace_values) {
         for (let replaceVal of replaceConfig.replace_values) {
           let finalRegex: string = regExpr.replace('__REPLACE_VALUE__', replaceVal);
+          let regExprObj:RegExp = new RegExp(finalRegex,'ms');
           this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
           this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
           this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Replacing ${replaceVal} with ''`);
-          fileData = fileData.replace(finalRegex, '');
+          var regexResult = regExprObj.exec(fileData);
+          var afterStr = regexResult.index+regexResult[0].length;
+          fileData = fileData.substr(0,regexResult.index)+fileData.substr(afterStr);  
         }
       } else {
         this.ux.log(`Rule[${ruleName}] - ${sourceFile} - No replacement values found !!! `);
         let finalRegex: string = regExpr;
-        let replaceWith:string = replaceConfig.replace_with || '';
         this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
+        let regExprObj:RegExp = new RegExp(finalRegex,'ms');
+        let replaceWith:string = replaceConfig.replace_with || '';
+
         this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
         this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Replacing with '${replaceWith}'`);
-        fileData = fileData.replace(finalRegex, replaceWith);
+        var regexResult = regExprObj.exec(fileData);
+        var afterStr = regexResult.index+regexResult[0].length;
+        if(replaceWith){
+          fileData = fileData.substr(0,regexResult.index)+replaceWith+fileData.substr(afterStr);  
+        }else{
+          fileData = fileData.substr(0,regexResult.index)+fileData.substr(afterStr);  
+        }
 
       }
-      fileData = formatXml(fileData, {
-        collapseContent: true,
-        lineSeparator: '\n'
-      });
       this.ux.log(`${sourceFile}: Formatted to XML `);
-      fs.writeFileSync(`${destFile}`, fileData, { encoding: 'utf8' });
-      this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Written file to ${destFile}`);
+      fs.writeFileSync(`${sourceFileAbsPath}`, fileData, { encoding: 'utf8' });
+      this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Written file to ${sourceFileAbsPath}`);
     }
 
 
