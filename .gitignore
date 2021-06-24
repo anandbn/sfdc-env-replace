@@ -7,3 +7,6 @@
 /tmp
 node_modules
 demo
+replace.log
+test_regex.js
+replace_config_geico.yaml

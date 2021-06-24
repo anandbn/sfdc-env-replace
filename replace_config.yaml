@@ -6,9 +6,14 @@ regex_lib:
     analytics-settings: '(.[^\n]+<canShareAppsWithCommunities>(?:(?!<canShareAppsWithCommunities>).)*?(?:(?!<canShareAppsWithCommunities>).)*?<\/canShareAppsWithCommunities>)'
     layout-folderid: '(.[^\n]+<layoutItems>(?:(?!<layoutItems>).)*?<field>FolderId<\/field>(?:(?!<layoutItems>).)*?<\/layoutItems>)'
     routing_type: '(.[^\n]+<routingType xsi:nil="true"\/>)'
-    bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.geico\.dev(?:(?!<botUser>).)*?<\/botUser>)'
+    bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.TEST\.dev(?:(?!<botUser>).)*?<\/botUser>)'
 rules:
-record_type_visibility:
+    replace_chatbot_user:
+        files:
+          - force-app/main/default/bots/TEST_Virtual_Assistant/TEST_Virtual_Assistant.bot-meta.xml
+        regex_name: 'bot_user'
+        replace_with: '<botUser>virtual.assistant@salesforce.com.TEST.team</botUser>'
+    record_type_visibility:
         regex_name: 'record-type-visibility'
         files:
             - force-app/main/default/profiles/Admin.profile-meta.xml
@@ -57,9 +62,4 @@ record_type_visibility:
           - force-app/main/default/liveChatButtons/Virtual_Assistant_Application.liveChatButton-meta.xml
         regex_name: 'routing_type'
         replace_with: '<routingType>Choice</routingType>'
-    replace_chatbot_user:
-        files:
-          - force-app/main/default/bots/GEICO_Virtual_Assistant/GEICO_Virtual_Assistant.bot-meta.xml
-        regex_name: 'bot_user'
-        replace_with: '<botUser>virtual.assistant@salesforce.com.geico.team</botUser>'
-          
+      

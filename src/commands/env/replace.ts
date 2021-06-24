@@ -1,6 +1,6 @@
 
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Messages} from '@salesforce/core';
+import { Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 const YAML = require('yaml')
 
@@ -73,49 +73,58 @@ export default class Replace extends SfdxCommand {
 
     for (let sourceFile of replaceConfig.files) {
       let sourceFileAbsPath: string = `${this.flags.basedir}${path.sep}${sourceFile}`;
-      if(this.flags.testmode){
+      if (this.flags.testmode) {
         //backup the file if the backup file doesn't exist.
         let backupFile: string = `${sourceFileAbsPath}${this.flags.testmode ? '.bkup' : ''}`;
-        if(!fs.existsSync(backupFile)){
-          fs.copyFileSync(sourceFileAbsPath,backupFile);
-          this.ux.log(`Rule[${ruleName}] - Created backup file at ${backupFile}`);
+        if (!fs.existsSync(backupFile)) {
+          fs.copyFileSync(sourceFileAbsPath, backupFile);
+          this.ux.log(`Rule [${ruleName}] - Created backup file at ${backupFile}`);
         }
       }
 
       let fileData: string = fs.readFileSync(sourceFileAbsPath, { encoding: 'utf8', flag: 'r' });
-      this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Unformatted XML at ${sourceFileAbsPath}`);
+      this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Unformatted XML at ${sourceFileAbsPath}`);
       if (replaceConfig.replace_values) {
         for (let replaceVal of replaceConfig.replace_values) {
           let finalRegex: string = regExpr.replace('__REPLACE_VALUE__', replaceVal);
-          let regExprObj:RegExp = new RegExp(finalRegex,'ms');
-          this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
-          this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
-          this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Replacing ${replaceVal} with ''`);
+          let regExprObj: RegExp = new RegExp(finalRegex, 'ms');
+          this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
+          this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
+          this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing ${replaceVal} with ''`);
           var regexResult = regExprObj.exec(fileData);
-          var afterStr = regexResult.index+regexResult[0].length;
-          fileData = fileData.substr(0,regexResult.index)+fileData.substr(afterStr);  
+          if (regexResult) {
+            var afterStr = regexResult.index + regexResult[0].length;
+            fileData = fileData.substr(0, regexResult.index) + fileData.substr(afterStr);
+          } else {
+            this.ux.warn(`Rule [${ruleName}] - Regex didn't find any matches in ${sourceFileAbsPath}`);
+          }
         }
       } else {
-        this.ux.log(`Rule[${ruleName}] - ${sourceFile} - No replacement values found !!! `);
+        this.ux.log(`Rule [${ruleName}] - ${sourceFile} - No replacement values found !!! `);
         let finalRegex: string = regExpr;
-        this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
-        let regExprObj:RegExp = new RegExp(finalRegex,'ms');
-        let replaceWith:string = replaceConfig.replace_with || '';
+        this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
+        let regExprObj: RegExp = new RegExp(finalRegex, 'ms');
+        let replaceWith: string = replaceConfig.replace_with || '';
 
-        this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
-        this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Replacing with '${replaceWith}'`);
+        this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
+        this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing with '${replaceWith}'`);
         var regexResult = regExprObj.exec(fileData);
-        var afterStr = regexResult.index+regexResult[0].length;
-        if(replaceWith){
-          fileData = fileData.substr(0,regexResult.index)+replaceWith+fileData.substr(afterStr);  
-        }else{
-          fileData = fileData.substr(0,regexResult.index)+fileData.substr(afterStr);  
+        if (regexResult) {
+          var afterStr = regexResult.index + regexResult[0].length;
+          if (replaceWith) {
+            fileData = fileData.substr(0, regexResult.index) + replaceWith + fileData.substr(afterStr);
+          } else {
+            fileData = fileData.substr(0, regexResult.index) + fileData.substr(afterStr);
+          }
+        } else {
+          this.ux.warn(`Rule [${ruleName}] - Regex didn't find any matches in ${sourceFileAbsPath}`);
         }
+
 
       }
       this.ux.log(`${sourceFile}: Formatted to XML `);
       fs.writeFileSync(`${sourceFileAbsPath}`, fileData, { encoding: 'utf8' });
-      this.ux.log(`Rule[${ruleName}] - ${sourceFile} - Written file to ${sourceFileAbsPath}`);
+      this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Written file to ${sourceFileAbsPath}`);
     }
 
 

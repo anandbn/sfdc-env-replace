@@ -5,62 +5,14 @@
   "version": "0.2.0",
   "configurations": [
   {
-    "name": "Regex Test",
-    "program": "${workspaceFolder}/test_regex.js",
-    "request": "launch",
+    "name": "Attach",
+    "port": 9229,
+    "request": "attach",
     "skipFiles": [
       "<node_internals>/**"
     ],
     "type": "pwa-node"
-  },
-  {
-    "name": "YAML Parse",
-    "program": "${workspaceFolder}/test_yaml_parse.js",
-    "request": "launch",
-    "skipFiles": [
-      "<node_internals>/**"
-    ],
-    "type": "pwa-node"
-  },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Remote",
-      "address": "127.0.0.1",
-      "port": 9229,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Run All Tests",
-      "type": "node",
-      "request": "launch",
-      "protocol": "inspector",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": ["--inspect", "--no-timeouts", "--colors", "test/**/*.test.ts"],
-      "env": {
-        "NODE_ENV": "development",
-        "SFDX_ENV": "development"
-      },
-      "sourceMaps": true,
-      "smartStep": true,
-      "internalConsoleOptions": "openOnSessionStart",
-      "preLaunchTask": "Compile"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Run Current Test",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": ["--inspect", "--no-timeouts", "--colors", "${file}"],
-      "env": {
-        "NODE_ENV": "development",
-        "SFDX_ENV": "development"
-      },
-      "sourceMaps": true,
-      "smartStep": true,
-      "internalConsoleOptions": "openOnSessionStart",
-      "preLaunchTask": "Compile"
-    }
+  }
+  
   ]
 }
