@@ -30,18 +30,23 @@ env-replace 0.0.0 (link) https://github.com/anandbn/sfdc-env-replace
 To run the plugin execute as below
 
 ```
-sfdx env:replace -c <absoluate_path_to_config_YAML> -d <base_directory_for_your_org>
+sfdx env:replace -c <absolute_path_to_config_YAML> -d <base_directory_for_your_org> [-t -v]
 ```
 
 or 
 ```
-sfdx env:replace --replaceconfig <absoluate_path_to_config_YAML> -basedir <base_directory_for_your_org>
+sfdx env:replace --replaceconfig <absolute_path_to_config_YAML> -basedir <base_directory_for_your_org> [--testmode --verbose]
 ```
 
-Two parameters:
+Two required parameters:
 
-- `c` or `replaceconfig` : This is teh YAML file that has the replace configuration rules 
-- `d` or `basedir` : This is the base directory for your org confiuguration. This is the parent directory to `force-app`
+- `-c` or `replaceconfig` : This is teh YAML file that has the replace configuration rules 
+- `-d` or `basedir` : This is the base directory for your org confiuguration. This is the parent directory to `force-app`
+
+Two optional parameters:
+
+- `-t` or `--testmode` : This will store the original XML files in a `.bkup` before processing the rules. It's good to use this when you are testing your configurations.
+- `-v` or `--verbose` : To log additional details when executing.
 
 ### Replace Configuration YAML Specification
 
