@@ -10,6 +10,7 @@
     "@oclif/errors": "^1",
     "@salesforce/command": "^2",
     "@salesforce/core": "^2",
+    "glob": "^7.1.7",
     "tslib": "^1",
     "xml-formatter": "^2.4.0",
     "yaml": "^1.10.2"

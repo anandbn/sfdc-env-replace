@@ -10,3 +10,6 @@ demo
 replace.log
 test_regex.js
 replace_config_geico.yaml
+.vscode
+yarn.lock
+.DS_Store

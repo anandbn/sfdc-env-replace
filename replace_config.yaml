@@ -19,12 +19,19 @@ rules:
             - force-app/main/default/profiles/Admin.profile-meta.xml
         replace_values:
             - Knowledge__kav.FAQ
+
     invalid_user_permissions: 
-        extensions:
-            - profile
-            - permissionset
-        files:
-            - force-app/main/default/profiles/Admin.profile-meta.xml
+        directories:
+            - force-app/main/default/profiles
+        excludes:
+            - "*.bkup"
+            - CSR*
+            - End User*
+            - Cloning*
+            - Executive Spon*
+            - End User*
+            - Read Only*
+            - Virtual*
         regex_name: 'user-permission' # name must exist on the regex-lib section
         replace_values:
             - ArchiveArticles

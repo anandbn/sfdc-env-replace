@@ -1,13 +1,12 @@
-const fs = require('fs');
+var Glob = require('glob');
 
-var fileData = fs.readFileSync('demo/Admin.profile-meta.xml', { encoding: 'utf8', flag: 'r' });
+var pattern = "**/*"
+console.log(pattern)
 
-
-var regExpr = '(.[^\n]+<recordTypeVisibilities>(?:(?!<recordTypeVisibilities>).)*?<recordType>Knowledge__kav.FAQ<\/recordType>(?:(?!<recordTypeVisibilities>).)*?<\/recordTypeVisibilities>)';
-//var regExpr = '/(.[^\n]+<recordTypeVisibilities>*)/ms';
-var regExpObj = new RegExp(regExpr,'ms');
-var myRegexOut = regExpObj.exec(fileData);
-var afterStr = myRegexOut.index+myRegexOut[0].length;
-var fileData2 = fileData.substr(0,myRegexOut.index)+fileData.substr(afterStr);
-console.log(myRegexOut);
-console.log(fileData2);
+var mg = Glob.sync(pattern, {
+    cwd:'demo/DD1POC/force-app/main/default/profiles', 
+    ignore:['CSR*','End User*','Cloning*','Executive Spon*','End User*','Read Only*','Virtual*'],
+    silent:false,
+    absolute:true,
+});
+console.log(mg);
