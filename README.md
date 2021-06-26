@@ -35,7 +35,7 @@ sfdx env:replace -c <absolute_path_to_config_YAML> -d <base_directory_for_your_o
 
 or 
 ```
-sfdx env:replace --replaceconfig <absolute_path_to_config_YAML> -basedir <base_directory_for_your_org> [--testmode --verbose]
+sfdx env:replace --replaceconfig <absolute_path_to_config_YAML> -basedir <base_directory_for_your_org> [--testmode --debug]
 ```
 
 Two required parameters:
@@ -46,7 +46,7 @@ Two required parameters:
 Two optional parameters:
 
 - `-t` or `--testmode` : This will store the original XML files in a `.bkup` before processing the rules. It's good to use this when you are testing your configurations.
-- `-v` or `--verbose` : To log additional details when executing.
+- `-v` or `--debug` : To log additional details when executing.
 
 ### Replace Configuration YAML Specification
 
