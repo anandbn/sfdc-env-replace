@@ -40,13 +40,14 @@ sfdx env:replace --replaceconfig <absolute_path_to_config_YAML> -basedir <base_d
 
 Two required parameters:
 
-- `-c` or `replaceconfig` : This is teh YAML file that has the replace configuration rules 
-- `-d` or `basedir` : This is the base directory for your org confiuguration. This is the parent directory to `force-app`
+- `-c` or `--replaceconfig` : This is teh YAML file that has the replace configuration rules 
+- `-d` or `--basedir` : This is the base directory for your org confiuguration. This is the parent directory to `force-app`
 
-Two optional parameters:
+3 optional parameters:
 
 - `-t` or `--testmode` : This will store the original XML files in a `.bkup` before processing the rules. It's good to use this when you are testing your configurations.
 - `-v` or `--debug` : To log additional details when executing.
+- `-n` or `--rulename` : If you want to execute just of the rules in your YAML file vs. all. If this parameter isn't included all rules are executed.
 
 ### Replace Configuration YAML Specification
 

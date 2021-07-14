@@ -43,7 +43,8 @@ export default class Replace extends SfdxCommand {
     testmode: flags.boolean({ char: 't', description: messages.getMessage('testmodeFlagDescription') }),
     debug: flags.boolean({ char: 'v', description: messages.getMessage('verboseFlagDescription') }),
     // flag with a value (-n, --name=VALUE)
-    replaceconfig: flags.string({ char: 'c', description: messages.getMessage('replaceconfigFlagDescription') })
+    replaceconfig: flags.string({ char: 'c', description: messages.getMessage('replaceconfigFlagDescription') }),
+    rulename: flags.string({ char: 'n', description: messages.getMessage('rulenameFlagDescription') })
   };
 
   // Comment this out if your command does not require an org username
@@ -72,7 +73,10 @@ export default class Replace extends SfdxCommand {
       for (let key in replaceConfigs.rules) {
         let ruleRegex: string = replaceConfigs.rules[key].regex_name;
         let regExpr = replaceConfigs.regex_lib[ruleRegex];
-        this.replaceValuesForRule(key, replaceConfigs.rules[key], regExpr);
+        if((this.flags.rulename && this.flags.rulename == key) || !this.flags.rulename){
+          this.replaceValuesForRule(key, replaceConfigs.rules[key], regExpr);
+        }
+        
 
       }
 

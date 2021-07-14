@@ -13,3 +13,5 @@ replace_config_geico.yaml
 .vscode
 yarn.lock
 .DS_Store
+.circleci
+.images
