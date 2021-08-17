@@ -48,6 +48,7 @@ Two required parameters:
 - `-t` or `--testmode` : This will store the original XML files in a `.bkup` before processing the rules. It's good to use this when you are testing your configurations.
 - `-v` or `--debug` : To log additional details when executing.
 - `-n` or `--rulename` : If you want to execute just of the rules in your YAML file vs. all. If this parameter isn't included all rules are executed.
+- `-e` or `--environment` : The environment value to be used when replacing values. The value here should match what is in the YAML file.
 
 ### Replace Configuration YAML Specification
 
@@ -133,6 +134,27 @@ rules:
         replace_with: '<botUser>virtual.assistant@salesforce.com.test.team</botUser>'
 ```
 
+3. Replace a `botUser` on a Einstein Bot configuration with another username for the UAT environment
+
+```
+regex_lib:
+    bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.test\.dev(?:(?!<botUser>).)*?<\/botUser>)'
+rules:
+    replace_chatbot_user:
+        files:
+          - force-app/main/default/bots/Test_Virtual_Assistant/Test_Virtual_Assistant.bot-meta.xml
+        regex_name: 'bot_user'
+        replace_with: 
+            UAT: '<botUser>virtual.assistant@salesforce.com.uat</botUser>'
+```
+
+and the corresponding command would be :
+
+```
+sfdx env:replace -c <absolute_path_to_config_YAML> -d <base_directory_for_your_org> -e UAT
+```
+
+If a environment specific value is not found it'll use the value a at the top level.
 
 ### Writing your regular expression for salesforce Metadata
 

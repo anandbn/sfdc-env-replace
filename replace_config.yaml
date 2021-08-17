@@ -7,12 +7,18 @@ regex_lib:
     layout-folderid: '(.[^\n]+<layoutItems>(?:(?!<layoutItems>).)*?<field>FolderId<\/field>(?:(?!<layoutItems>).)*?<\/layoutItems>)'
     routing_type: '(.[^\n]+<routingType xsi:nil="true"\/>)'
     bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.TEST\.dev(?:(?!<botUser>).)*?<\/botUser>)'
+    saml_enabled: '/(.[^\n]+<enableSamlLogin>(?:(?!<enableSamlLogin>).)*?false(?:(?!<enableSamlLogin>).)*?<\/enableSamlLogin>)'
+    fedid_enabled: '/(.[^\n]+<enableCaseInsensitiveFederationID>(?:(?!<enableCaseInsensitiveFederationID>).)*?false(?:(?!<enableCaseInsensitiveFederationID>).)*?<\/enableCaseInsensitiveFederationID>)'
 rules:
     replace_chatbot_user:
         files:
-          - force-app/main/default/bots/TEST_Virtual_Assistant/TEST_Virtual_Assistant.bot-meta.xml
+          - bots/TEST_Virtual_Assistant/TEST_Virtual_Assistant.bot-meta.xml
         regex_name: 'bot_user'
-        replace_with: '<botUser>virtual.assistant@salesforce.com.TEST.team</botUser>'
+        replace_with: 
+            TEAM: '<botUser>virtual.assistant@salesforce.com.TEST.team</botUser>'
+            SIT: '<botUser>virtual.assistant@salesforce.com.TEST.sit</botUser>'
+            UAT: '<botUser>virtual.assistant@salesforce.com.TEST.uat</botUser>'
+            PROD: '<botUser>virtual.assistant@salesforce.com</botUser>'
     record_type_visibility:
         regex_name: 'record-type-visibility'
         files:
@@ -69,4 +75,13 @@ rules:
           - force-app/main/default/liveChatButtons/Virtual_Assistant_Application.liveChatButton-meta.xml
         regex_name: 'routing_type'
         replace_with: '<routingType>Choice</routingType>'
-      
+    enable_saml:
+        files:
+            - settings/Security.settings-meta.xml
+        regex_name: 'saml_enabled'
+        replace_with: '<enableSamlLogin>true</enableSamlLogin>'
+    fedid_case_insensitive:
+        files:
+            - force-app/main/default/settings/Security.settings-meta.xml
+        regex_name: 'fedid_enabled'
+        replace_with: '<enableCaseInsensitiveFederationID>true</enableCaseInsensitiveFederationID>'

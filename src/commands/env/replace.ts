@@ -44,7 +44,8 @@ export default class Replace extends SfdxCommand {
     debug: flags.boolean({ char: 'v', description: messages.getMessage('verboseFlagDescription') }),
     // flag with a value (-n, --name=VALUE)
     replaceconfig: flags.string({ char: 'c', description: messages.getMessage('replaceconfigFlagDescription') }),
-    rulename: flags.string({ char: 'n', description: messages.getMessage('rulenameFlagDescription') })
+    rulename: flags.string({ char: 'n', description: messages.getMessage('rulenameFlagDescription') }),
+    environment: flags.string({ char: 'e', description: messages.getMessage('environmentFlagDescription') })
   };
 
   // Comment this out if your command does not require an org username
@@ -176,16 +177,22 @@ export default class Replace extends SfdxCommand {
           this.ux.log(`Rule [${ruleName}] - Using Regular Expression : ${finalRegex}`);
         }
         let regExprObj: RegExp = new RegExp(finalRegex, 'ms');
-        let replaceWith: string = replaceConfig.replace_with || '';
+
+        let replaceWith: any = replaceConfig.replace_with ;
+        let replaceWithStr=replaceWith;
+        if(this.flags.environment){
+          this.ux.log(`Rule [${ruleName}] - Using ${this.flags.environment} to determine replacement value`);
+          replaceWithStr=replaceWith[this.flags.environment]?replaceWith[this.flags.environment]:replaceWith;
+        }
 
         if (this.flags.debug) {
-          this.ux.log(`Rule [${ruleName}] - Replacing with '${replaceWith}'`);
+          this.ux.log(`Rule [${ruleName}] - Replacing with '${replaceWithStr}'`);
         }
         var regexResult = regExprObj.exec(fileData);
         if (regexResult) {
           var afterStr = regexResult.index + regexResult[0].length;
-          if (replaceWith) {
-            fileData = fileData.substr(0, regexResult.index) + replaceWith + fileData.substr(afterStr);
+          if (replaceWithStr) {
+            fileData = fileData.substr(0, regexResult.index) + replaceWithStr + fileData.substr(afterStr);
           } else {
             fileData = fileData.substr(0, regexResult.index) + fileData.substr(afterStr);
           }
@@ -248,7 +255,12 @@ export default class Replace extends SfdxCommand {
             this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Using Regular Expression : ${finalRegex}`);
           }
           let regExprObj: RegExp = new RegExp(finalRegex, 'ms');
-          let replaceWith: string = replaceConfig.replace_with || '';
+          let replaceWith: any = replaceConfig.replace_with ;
+          let replaceWithStr=replaceWith;
+          if(this.flags.environment){
+            this.ux.log(`Rule [${ruleName}] - Using ${this.flags.environment} to determine replacement value`);
+            replaceWithStr=replaceWith[this.flags.environment]?replaceWith[this.flags.environment]:replaceWith;
+          }
 
           if (this.flags.debug) {
             this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);

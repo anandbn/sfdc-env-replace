@@ -4,5 +4,6 @@
   "testmodeFlagDescription":"A toggle that won't replace the original file after replacing. If true, it'll create a new file with .new extension",
   "verboseFlagDescription":"Verbose mode to display additional logging information",
   "replaceconfigFlagDescription":"File that contains the text to be replaced",
-  "rulenameFlagDescription":"Name of the specific rule to execute. If none specified all rules are executed"
+  "rulenameFlagDescription":"Name of the specific rule to execute. If none specified all rules are executed",
+  "environmentFlagDescription":"Name of the specific rule to execute. If none specified all rules are executed"
 }
