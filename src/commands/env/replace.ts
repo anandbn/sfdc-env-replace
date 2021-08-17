@@ -264,13 +264,13 @@ export default class Replace extends SfdxCommand {
 
           if (this.flags.debug) {
             this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
-            this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing with '${replaceWith}'`);
+            this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing with '${replaceWithStr}'`);
           }
           var regexResult = regExprObj.exec(fileData);
           if (regexResult) {
             var afterStr = regexResult.index + regexResult[0].length;
-            if (replaceWith) {
-              fileData = fileData.substr(0, regexResult.index) + replaceWith + fileData.substr(afterStr);
+            if (replaceWithStr) {
+              fileData = fileData.substr(0, regexResult.index) + replaceWithStr + fileData.substr(afterStr);
             } else {
               fileData = fileData.substr(0, regexResult.index) + fileData.substr(afterStr);
             }
