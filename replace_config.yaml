@@ -9,7 +9,17 @@ regex_lib:
     bot_user: '(<botUser>(?:(?!<botUser>).)*?virtual\.assistant@salesforce\.com\.TEST\.dev(?:(?!<botUser>).)*?<\/botUser>)'
     saml_enabled: '/(.[^\n]+<enableSamlLogin>(?:(?!<enableSamlLogin>).)*?false(?:(?!<enableSamlLogin>).)*?<\/enableSamlLogin>)'
     fedid_enabled: '/(.[^\n]+<enableCaseInsensitiveFederationID>(?:(?!<enableCaseInsensitiveFederationID>).)*?false(?:(?!<enableCaseInsensitiveFederationID>).)*?<\/enableCaseInsensitiveFederationID>)'
+    bot_step_id: '(.[^\n]+<stepIdentifier>)(.*)(<\/stepIdentifier>)\n'
+    bot_msg_id: '(.[^\n]+<messageIdentifier>)(.*)(<\/messageIdentifier>)\n'
 rules:
+    replace_bot_step_id:
+        files:
+          - v1.xml
+        regex_name: 'bot_step_id'
+    replace_bot_msg_id:
+        files:
+          - v1.xml
+        regex_name: 'bot_msg_id'
     replace_chatbot_user:
         files:
           - bots/TEST_Virtual_Assistant/TEST_Virtual_Assistant.bot-meta.xml
