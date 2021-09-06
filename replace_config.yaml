@@ -11,15 +11,41 @@ regex_lib:
     fedid_enabled: '/(.[^\n]+<enableCaseInsensitiveFederationID>(?:(?!<enableCaseInsensitiveFederationID>).)*?false(?:(?!<enableCaseInsensitiveFederationID>).)*?<\/enableCaseInsensitiveFederationID>)'
     bot_step_id: '(.[^\n]+<stepIdentifier>)(.*)(<\/stepIdentifier>)\n'
     bot_msg_id: '(.[^\n]+<messageIdentifier>)(.*)(<\/messageIdentifier>)\n'
+    bot_var_id: '(.[^\n]+<variableOperationIdentifier>)(.*)(<\/variableOperationIdentifier>)\n' 
+    bot_qreply_id: '(.[^\n]+<quickReplyOptionIdentifier>)(.*)(<\/quickReplyOptionIdentifier>)\n'  
 rules:
     replace_bot_step_id:
-        files:
-          - v1.xml
+        directories:
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant_2
+        excludes:
+            - GEICO_Virtual_Assistant*
+            - "*.bkup"
         regex_name: 'bot_step_id'
     replace_bot_msg_id:
-        files:
-          - v1.xml
+        directories:
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant_2
+        excludes:
+            - GEICO_Virtual_Assistant*
+            - "*.bkup"
         regex_name: 'bot_msg_id'
+    replace_bot_var_id:
+        directories:
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant_2
+        excludes:
+            - GEICO_Virtual_Assistant*
+            - "*.bkup"
+        regex_name: 'bot_var_id'
+    replace_bot_qreply_id:
+        directories:
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant
+            - cs-va-chat/main/default/bots/GEICO_Virtual_Assistant_2
+        excludes:
+            - GEICO_Virtual_Assistant*
+            - "*.bkup"
+        regex_name: 'bot_qreply_id'
     replace_chatbot_user:
         files:
           - bots/TEST_Virtual_Assistant/TEST_Virtual_Assistant.bot-meta.xml

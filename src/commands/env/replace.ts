@@ -126,9 +126,14 @@ export default class Replace extends SfdxCommand {
         silent: false,
         absolute: true,
       });
-      for (let sourceFileAbsPath of includedFiles) {
-        this.executeReplaceRuleForFile(ruleName,replaceConfig,regExpr,sourceFileAbsPath);
+      if(includedFiles && includedFiles.length>0){
+        for (let sourceFileAbsPath of includedFiles) {
+          this.executeReplaceRuleForFile(ruleName,replaceConfig,regExpr,sourceFileAbsPath);
+        }
+      }else{
+        this.ux.warn(`Rule [${ruleName}] - No files found based on inclusion and exclusion rules.  Check your YAML configuration file`);
       }
+
 
 
     }
@@ -193,7 +198,7 @@ export default class Replace extends SfdxCommand {
         }
 
         if (this.flags.debug) {
-          this.ux.log(`Rule [${ruleName}] - Replacing with '${replaceWithStr}'`);
+          this.ux.log(`Rule [${ruleName}] - Replacing with '${replaceWithStr?replaceWithStr:''}'`);
         }
         var regexResult = regExprObj.exec(fileData);
 
@@ -269,7 +274,7 @@ export default class Replace extends SfdxCommand {
 
           if (this.flags.debug) {
             this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Absolute file path ${sourceFileAbsPath}`);
-            this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing with '${replaceWithStr}'`);
+            this.ux.log(`Rule [${ruleName}] - ${sourceFile} - Replacing with '${replaceWithStr?replaceWithStr:''}'`);
           }
           var regexResult = regExprObj.exec(fileData);
           while(regexResult){
